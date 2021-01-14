@@ -27,7 +27,7 @@ But the problem we are facing is that we can not do this command because of lock
 
 Than we need to open this app in web with
 
-		- "flutter devices"
+		   flutter devices
 
 Which shows us which devices are available, like chrome, than we run app on chrome with other command
 
