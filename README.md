@@ -75,3 +75,108 @@ To change margin we can again do it with kIsWeb:
       		)
 		
 		
+
+# ZeljoDostavaApp
+
+Mobile and web app
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
+
+## Getting Started with Flutter web
+
+This project was firstly made for android and then it needed to have web also
+
+First of all we needed to enable web for this app:
+
+    flutter congif --enable-web
+
+We also need web folder which is used for web app, we create it with:
+
+    flutter create .
+
+There is problem which we had, package name is not supported by Dart which is ZeljoDostavaApp, it needs to have only lowcase letter and underlines, more can be read on [online documentation](https://dart.dev/guides/packages)
+
+We changed it to zeljo_dostava
+
+We can run program then with:
+
+    flutter run -d chrome
+
+This lead us to another problem where we have two package name: at.zeljo and com.example, so we changed it in whole project to be at.zeljo
+
+When we run our app on web now it works but immedieately crashes because we can not use: 
+
+    Platform.isIOS
+
+All places in code where we used it are now like this
+
+    if(!kIsWeb){
+        Platform.isIos ? ...
+    }
+
+This kIsWeb is true when we are on web version of this app so Platform.isIOS will never be reached on web.
+
+## Login screen
+
+Next problem we have is on login screen where when can not add phone.
+
+The solution is that instead of using 
+
+    verifyPhoneNumber() 
+    
+we must use:
+
+    signInWithPhoneNumber()
+
+After that we have new problem which is that in verification function there is not verifiationID.
+
+This can be solved by adding [then] after [signInWithPhoneNumber()] like:
+
+    signInWithPhoneNumber().then((value) => verificationID = value);
+
+After that change we can succesfully go through to NewsFeed screen.
+
+We also have problem with Facebook and Google login
+
+For google login we need to add meta tag in index.html file in web folder:
+
+    <meta name="google-signin-client_id" content="575024045364-3tos4oqc1fh8r807n7sl1fdbh08c5j50.apps.googleusercontent.com">
+
+After which we have error in console when I started web app in Google Chrome:
+
+    Uncaught (in promise) Error: PlatformException(idpiframe_initialization_failed, Not a valid origin for the client: http://localhost:58248 has not been whitelisted for client ID 575024045364-3tos4oqc1fh8r807n7sl1fdbh08c5j50.apps.googleusercontent.com. Please go to https://console.developers.google.com/ and whitelist this origin for your project's client ID., https://developers.google.com/identity/sign-in/web/reference#error_codes, null)
+
+After which i installed mozilla firefox, and created new web app on console.developers.google.com
+
+    Zeljo Dostava
+
+with Client ID:
+
+    575024045364-0eqtp57cfnjlj7qn9lajbns1hs4fl8ak.apps.googleusercontent.com
+
+and that client id I added in meta in index.html. After I restarted application, and run it mozilla firefox it worked.
+
+I tried again with Google and it worked there also.
+
+## News feed screen
+
+On news feed we have problem where we can not use AppSignInWithIphone provider because this provider uses IphoneSignInAvailable which is similar to Platform.isIOS thus we will put it like:
+
+    if(!kIsWeb){
+        Provider<IphoneSignInAvailable>....
+    }
+
+
+
+
